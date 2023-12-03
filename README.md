@@ -7,4 +7,5 @@
 5. Install a package with composer: docker-compose run --rm composer require spatie/laravel-permission
 6. docker-compose run --rm composer chmod -R 777 storage
 7. docker-compose run --rm npm i
+8. docker-compose run artisan migrate
 ```
