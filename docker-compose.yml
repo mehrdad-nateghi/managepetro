@@ -8,7 +8,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./src:/var/www/html
+      - ./backend:/var/www/html
     depends_on:
       - mysql
       - php
@@ -17,8 +17,8 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_USER: laravel
+      MYSQL_DATABASE: symfony
+      MYSQL_USER: symfony
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
     volumes:
@@ -28,27 +28,22 @@ services:
       context: .
       dockerfile: php.dockerfile
     volumes:
-      - ./src:/var/www/html
+      - ./backend:/var/www/html
   composer:
     build:
       context: .
       dockerfile: composer.dockerfile
     volumes:
-      - ./src:/var/www/html
+      - ./backend:/var/www/html
     working_dir: /var/www/html
-  npm:
-    image: node:current-alpine
-    volumes:
-      - ./src:/var/www/html
-    entrypoint: npm
-    working_dir: /var/www/html
-  artisan:
+  frontend:
     build:
       context: .
-      dockerfile: php.dockerfile
+      dockerfile: react.dockerfile
+    ports:
+      - "3000:3000"
     volumes:
-      - ./src:/var/www/html
-    working_dir: /var/www/html
-    depends_on:
-      - mysql
-    entrypoint: ["php","/var/www/html/artisan"]
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
